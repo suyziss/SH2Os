@@ -22,6 +22,39 @@ section{padding:34px 0 80px}.sectionhead{display:flex;align-items:end;justify-co
 @media(max-width:800px){.hero{grid-template-columns:1fr;gap:38px;padding:75px 0 60px;min-height:0}.profile-card{width:min(300px,85%);margin:0 auto}.nav{display:none}.stats{margin-bottom:65px}.projects{grid-template-columns:repeat(2,1fr)}.aboutgrid{grid-template-columns:1fr}.contact{align-items:flex-start;flex-direction:column}}
 @media(max-width:520px){.wrap{width:min(100% - 28px,1120px)}.topbar{height:65px}.brand{font-size:14px}.githubbtn{padding:10px 13px}.hero{padding:65px 0 50px}h1{font-size:54px}.lead{font-size:14px}.stats{grid-template-columns:repeat(2,1fr)}.stat{padding:17px;border-bottom:1px solid var(--line)}.stat:nth-child(2){border-right:0}.stat:nth-child(3),.stat:nth-child(4){border-bottom:0}.projects{grid-template-columns:1fr}.project{min-height:195px}section{padding-bottom:65px}.sectionhead h2{font-size:27px}.contact{padding:25px}.contact h2{font-size:25px}.footer{flex-direction:column}}
 </style>
+<style id="material-you-system-theme">
+:root{color-scheme:light dark;--bg:#f8f7ff;--surface:#f0eff7;--surface2:#e8e7f0;--surface3:#dfdeea;--line:#d1d0dc;--text:#1b1b22;--muted:#60616d;--primary:#514b83;--on-primary:#fff;--secondary:#5e5c70;--tertiary:#80546f;--cyan:#3e637c}
+@media(prefers-color-scheme:dark){:root{--bg:#111318;--surface:#1b1b22;--surface2:#24252d;--surface3:#30313b;--line:#41424d;--text:#e5e1e9;--muted:#c5c1cb;--primary:#c6c1ff;--on-primary:#302d4f;--secondary:#c9c4d5;--tertiary:#efb8d8;--cyan:#a9cbe5}}
+body:before{display:none}
+.topbar{border-color:var(--line)}
+.brandmark{border-radius:12px}
+.nav a{border-radius:100px}
+.githubbtn,.primary{box-shadow:none;transition:background .18s,transform .18s}
+.githubbtn:hover,.primary:hover{filter:none;background:var(--primary);transform:translateY(-1px)}
+.secondary,.lang{border-color:var(--line);background:var(--surface2)}
+.hero{min-height:0;padding:84px 0 62px;gap:56px}
+h1{letter-spacing:-.065em}
+.gradient{color:var(--primary);background:none;-webkit-text-fill-color:currentColor}
+.profile-card{transform:none;box-shadow:none;border-radius:24px;background:var(--surface);padding:18px}
+.profile-art{height:190px;border-radius:18px;background:var(--surface3)}
+.profile-art:before,.profile-art:after{display:none}
+.profile-monogram{color:var(--primary);font-size:68px}
+.status{color:var(--cyan);background:var(--surface2)}
+.stats{border-color:var(--line);border-radius:20px;background:var(--surface)}
+.stat strong{color:var(--primary)}
+.project{border-color:var(--line);border-radius:20px;background:var(--surface);box-shadow:none}
+.project:hover{transform:translateY(-2px);border-color:var(--primary);background:var(--surface2)}
+.projecticon{border-radius:12px;background:var(--surface3);color:var(--primary)}
+.langtag{background:var(--surface3)}
+.aboutbox,.stackbox{border-color:var(--line);border-radius:20px;background:var(--surface)}
+.chip{background:var(--surface2);border-color:var(--line)}
+.stacklist span{background:var(--surface2);color:var(--primary);border-color:var(--line)}
+.contact{border-color:var(--line);border-radius:24px;background:var(--surface);padding:32px}
+.kicker{color:var(--tertiary)}
+.footer{border-color:var(--line)}
+@media(max-width:800px){.hero{padding:65px 0 50px;gap:32px}}
+@media(max-width:520px){.hero{padding:55px 0 42px}.profile-card{width:min(300px,85%)}}
+</style>
 </head>
 <body>
 <header class="wrap topbar"><a class="brand" href="#"><span class="brandmark">S.</span><span>suyziss<span style="color:var(--purple)">/</span>dev</span></a><nav class="nav"><a href="#projects" data-i="navProjects">Проекты</a><a href="#about" data-i="navAbout">Обо мне</a><a href="#contact" data-i="navContact">Контакты</a></nav><div class="actions"><button class="lang" id="langBtn" aria-label="Switch language">EN</button><a class="githubbtn" href="https://github.com/suyziss" target="_blank" rel="noreferrer">GitHub ↗</a></div></header>
@@ -44,6 +77,19 @@ const descriptions={SuyzissGram:{ru:"Эксперимент с социальн�
 function renderProjects(repos){const grid=document.getElementById("projectsGrid");const map=new Map(repos.map(r=>[r.name,r]));const chosen=featured.map(n=>map.get(n)).filter(Boolean).slice(0,6);if(!chosen.length){grid.innerHTML='<div class="loading">GitHub API временно недоступен. <a href="https://github.com/suyziss?tab=repositories">Открыть репозитории ↗</a></div>';return}grid.innerHTML=chosen.map((r,i)=>{const d=descriptions[r.name]||{ru:r.description||"Открытый проект и эксперимент.",en:r.description||"An open project and experiment."};const desc=typeof d==="string"?d:d[lang];const symbol=["✳","⌘","▧","◈","⌬","⌁"][i];return '<a class="project" href="'+r.html_url+'" target="_blank" rel="noreferrer"><div class="projecttop"><span class="projecticon">'+symbol+'</span><span class="repo">'+r.name+'</span></div><h3>'+r.name+'</h3><p>'+escapeHtml(desc||"")+'</p><div class="projectfoot"><span class="langtag">'+(r.language||"Project")+'</span><span>★ '+r.stargazers_count+' &nbsp;⑂ '+r.forks_count+'</span><span class="arrow">↗</span></div></a>'}).join("")}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 async function load(){try{const [u,rs]=await Promise.all([fetch("https://api.github.com/users/suyziss"),fetch("https://api.github.com/users/suyziss/repos?per_page=100&sort=updated")]);if(!u.ok||!rs.ok)throw Error("API");const user=await u.json(),repos=await rs.json();window.repos=repos.filter(r=>!r.fork);document.getElementById("repoCount").textContent=user.public_repos;document.getElementById("followers").textContent=user.followers;document.getElementById("following").textContent=user.following;document.getElementById("stars").textContent=window.repos.reduce((n,r)=>n+r.stargazers_count,0);renderProjects(window.repos)}catch(e){document.getElementById("projectsGrid").innerHTML='<div class="loading">Не удалось загрузить данные GitHub. Проверьте подключение к интернету.</div>';}}
+
+// Follow the operating system's light/dark appearance automatically.
+const systemTheme=window.matchMedia("(prefers-color-scheme: dark)");
+function syncSystemTheme(){
+  const dark=systemTheme.matches;
+  document.documentElement.dataset.theme=dark?"dark":"light";
+  const themeMeta=document.querySelector('meta[name="theme-color"]');
+  if(themeMeta)themeMeta.setAttribute("content",dark?"#111318":"#f8f7ff");
+}
+syncSystemTheme();
+if(systemTheme.addEventListener)systemTheme.addEventListener("change",syncSystemTheme);
+else systemTheme.addListener(syncSystemTheme);
+
 document.getElementById("year").textContent=new Date().getFullYear();load();
 </script>
 </body></html>
